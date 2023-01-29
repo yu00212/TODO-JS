@@ -176,7 +176,89 @@ module.hot.accept(reloadCSS);
 "use strict";
 
 require("./styles.css");
-document.getElementById("app").innerHTML = "\n<h1>Hello Vanilla!</h1>\n<div>\n  We use the same configuration as Parcel to bundle this sandbox, you can find more\n  info about Parcel \n  <a href=\"https://parceljs.org\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>.\n</div>\n";
+var onClickAdd = function onClickAdd() {
+  // テキストボックスの値を取得し、初期化する
+  var inputText = document.getElementById("add-text").value;
+  document.getElementById("add-text").value = "";
+  createIncompleteList(inputText);
+};
+
+// 未完了リストから指定の要素を削除
+var deletFromIncompleteList = function deletFromIncompleteList(target) {
+  document.getElementById("incomplete-list").removeChild(deleteTarget);
+
+  // 未完了リストに追加する要素
+  var createIncompleteList = function createIncompleteList(text) {
+    // div生成
+    var div = document.createElement("div");
+    // class付与
+    div.className = "list-row";
+
+    // liタグ生成
+    var li = document.createElement("li");
+    // 生成したliタグの中に上で取得した入力内容を入れる
+    li.innerText = text;
+
+    // button（完了）タグ生成
+    var completeButton = document.createElement("button");
+    completeButton.innerText = "完了";
+    completeButton.addEventListener("click", function () {
+      // 押された完了ボタンの親タグ(div)を未完了リストから削除
+      deletFromIncompleteList(completeButton.parentNode);
+    });
+
+    // button（削除）タグ生成
+    var deleteButton = document.createElement("button");
+    deleteButton.innerText = "削除";
+    deleteButton.addEventListener("click", function () {
+      // 押された削除ボタンの親タグ(div)を未完了リストから削除
+      deletFromIncompleteList(deleteButton.parentNode);
+
+      // 完了リストに追加する要素
+      var addTarget = completeButton.parentNode;
+      // liタグとその中のtextを取得
+      var text = addTarget.firstElementChild.innerText;
+
+      // div以下を初期化
+      addTarget.textContent = null;
+
+      // liタグ生成
+      var li = document.createElement("li");
+      li.innerText = text;
+
+      // buttonタグ生成
+      var backButton = document.createElement("button");
+      backButton.innerText = "戻す";
+      backButton.addEventListener("click", function () {
+        // 押された戻すボタンの親タグ(div)を完了リストから削除
+        var deleteTarget = backButton.parentNode;
+        document.getElementById("complete-list").removeChild(deleteTarget);
+
+        // テキスト取得
+        var text = backButton.parentNode.firstElementChild.innerText;
+        createIncompleteList(text);
+      });
+
+      // divタグの子要素に各要素を設定
+      addTarget.appendChild(li);
+      addTarget.appendChild(backButton);
+
+      // 完了リストに追加
+      document.getElementById("complete-list").appendChild(addTarget);
+    });
+
+    // divタグの子要素に各要素を設定
+    div.appendChild(li);
+    div.appendChild(completeButton);
+    div.appendChild(deleteButton);
+
+    // 未完了リストに追加
+    document.getElementById("incomplete-list").appendChild(div);
+  };
+};
+document.getElementById("add-button").addEventListener("click", function () {
+  return onClickAdd();
+});
 },{"./styles.css":"src/styles.css"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
